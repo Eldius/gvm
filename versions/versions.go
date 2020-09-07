@@ -56,10 +56,12 @@ func parseDownloadPage(body io.ReadCloser) []GoVersion {
 					v.Source = parseLink(link)
 					log.Println("souce")
 				default:
-					
+
 				}
 			})
-			versions = append(versions, v)
+			if v.Source != "" {
+				versions = append(versions, v)
+			}
 		})
 	})
 
