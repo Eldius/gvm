@@ -17,6 +17,7 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/Eldius/go-version-manager/versions"
 	"github.com/spf13/cobra"
@@ -34,7 +35,10 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("lsRemote called")
-		versions.ListAvailableVersions()
+		versions := versions.ListAvailableVersions()
+		for _, v := range versions {
+			log.Printf("- %s => %s (%s)\n", v.Name, v.LinuxAmd64, v.Source)
+		}
 	},
 }
 

@@ -2,6 +2,7 @@ package versions
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"strings"
@@ -22,30 +23,51 @@ func ListAvailableVersions() []GoVersion {
 		log.Fatalf("status code error: %d %s", res.StatusCode, res.Status)
 	}
 
+	return parseDownloadPage(res.Body)
+
+}
+
+func parseDownloadPage(body io.ReadCloser) []GoVersion {
 	// Load the HTML document
-	doc, err := goquery.NewDocumentFromReader(res.Body)
+	doc, err := goquery.NewDocumentFromReader(body)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	var versions []GoVersion
-	// Find the review items
-	doc.Find("h2.toggleButton[title=\"Click to show downloads for this version\"]").Each(func(i int, s *goquery.Selection) {
-		// For each item found, get the band and title
-		version := ParseVersionName(s.Text())
-		fmt.Printf("version %d: '%s'\n", i, version)
-		s.Parent().Find("table.codetable>tbody>a.download").Each(func(i1 int, l *goquery.Selection) {
-			log.Println("testing...")
-			log.Printf("OS: %s\n", l.Find("..>..>td(2)").Text())
-			log.Printf("Arch: %s\n", l.Find("..>..>td(3)").Text())
-		})
-		versions = append(versions, GoVersion{
-			Name: version,
+	doc.Find("table.codetable").Each(func(i int, t *goquery.Selection) {
+		parentAttr, _ := t.Attr("class")
+		log.Printf("testing 00: %v (%v/%s)\n", goquery.NodeName(t), t.HasClass("collapsed"), parentAttr)
+		t.Parent().Find("h2").Each(func(i int, h *goquery.Selection) {
+			version := ParseVersionName(h.Text())
+			v := GoVersion{
+				Name: version,
+			}
+			t.Find("tbody>tr").Each(func(i int, r *goquery.Selection) {
+				link, _ := r.Find("td.filename>a").Attr("href")
+				osName := r.Find("td::nth-child(3)").Text()
+				archName := r.Find("td::nth-child(4)").Text()
+				log.Printf("os: '%s' / arch: '%s' / link: '%s'", osName, archName, link)
+				switch os := fmt.Sprintf("%s-%s", osName, archName); os {
+				case "Linux-x86-64":
+					v.LinuxAmd64 = parseLink(link)
+					log.Println("linux")
+				case "-":
+					v.Source = parseLink(link)
+					log.Println("souce")
+				default:
+					
+				}
+			})
+			versions = append(versions, v)
 		})
 	})
 
 	return versions
+}
 
+func parseLink(link string) string {
+	return fmt.Sprintf("https://golang.org%s", link)
 }
 
 /*
