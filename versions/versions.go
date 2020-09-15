@@ -79,3 +79,28 @@ from HTML text
 func ParseVersionName(version string) string {
 	return strings.ReplaceAll(strings.ReplaceAll(version, " ▹", ""), " ▾", "")
 }
+
+/*
+Install installs go versions
+*/
+func Install(version string) {
+	v := filterVersion(version, ListAvailableVersions())
+	if v == nil {
+		fmt.Println("Version not found...")
+		return
+	}
+	fmt.Println(v)
+}
+
+/*
+FilterVersion filter version slice by name
+*/
+func filterVersion(version string, versions []GoVersion) *GoVersion {
+	for _, v := range versions {
+		if v.Name == version {
+			log.Println(v)
+			return &v
+		}
+	}
+	return nil
+}

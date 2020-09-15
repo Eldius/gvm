@@ -2,6 +2,7 @@ package config
 
 import (
 	"log"
+	"os"
 	"path/filepath"
 
 	"github.com/mitchellh/go-homedir"
@@ -10,6 +11,10 @@ import (
 const (
 	configDir = "~/.gvm"
 )
+
+func init() {
+	_ = os.MkdirAll(GetVersionsDir(), os.ModePerm)
+}
 
 /*
 Root returns the app config root folder

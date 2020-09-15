@@ -26,3 +26,37 @@ func TestParseDownloadPage(t *testing.T) {
 		}
 	}
 }
+
+func TestFilterVersionValid(t *testing.T) {
+	versions := createVersionsSlice()
+
+	v := filterVersion("go1.15.1", versions)
+
+	if v == nil {
+		t.Error("v should not be nil")
+	} else if v.LinuxAmd64 != "https://link.xpto/1.15.1.tar.gz" {
+		t.Errorf("v.LinuxAmd64 should be 'https://link.xpto/1.15.1.tar.gz', but was '%s'", v.LinuxAmd64)
+	}
+}
+
+func TestFilterVersionInvalid(t *testing.T) {
+	versions := createVersionsSlice()
+
+	v := filterVersion("platipus", versions)
+
+	if v != nil {
+		t.Error("v should be nil")
+	}
+}
+
+func createVersionsSlice() []GoVersion {
+	return []GoVersion{
+		{
+			Name:       "go1.15.1",
+			LinuxAmd64: "https://link.xpto/1.15.1.tar.gz",
+		}, {
+			Name:       "go1.14.8",
+			LinuxAmd64: "https://link.xpto/1.14.8.tar.gz",
+		},
+	}
+}

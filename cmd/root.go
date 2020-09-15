@@ -5,7 +5,9 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"os"
+	"path/filepath"
 
 	"github.com/Eldius/go-version-manager/config"
 	"github.com/spf13/cobra"
@@ -62,6 +64,13 @@ func initConfig() {
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match
+
+	if logFile, err := os.OpenFile(filepath.Join(config.GetWorkspaceDir(), "execution.log"), os.O_CREATE, os.ModePerm); err != nil {
+		log.Println("Failed to open log file")
+		log.Panicln(err.Error())
+	} else {
+		log.SetOutput(logFile)
+	}
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
