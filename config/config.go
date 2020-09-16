@@ -28,10 +28,16 @@ func Root() string {
 	return cfgDir
 }
 
+/*
+GetWorkspaceDir returns the workspace dir
+*/
 func GetWorkspaceDir() string {
 	return filepath.Join(Root(), "workspace")
 }
 
+/*
+GetVersionsDir returns the versions dir
+*/
 func GetVersionsDir() string {
 	return filepath.Join(GetWorkspaceDir(), "versions")
 }

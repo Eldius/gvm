@@ -3,10 +3,14 @@ package versions
 import (
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strings"
 
+	"github.com/Eldius/go-version-manager/config"
 	"github.com/PuerkitoBio/goquery"
 )
 
@@ -89,7 +93,14 @@ func Install(version string) {
 		fmt.Println("Version not found...")
 		return
 	}
-	fmt.Println(v)
+	f, err := downloadVersion(*v)
+	if err != nil {
+		fmt.Printf("Failed to download file from '%s'\n", v.LinuxAmd64)
+		log.Panic(err.Error())
+	}
+	os.Setenv("PATH", fmt.Sprintf("%s:%s", filepath.Join(config.GetWorkspaceDir(), "bin"), os.Getenv("PATH")))
+	fmt.Println(os.Getenv("PATH"))
+	fmt.Println(f)
 }
 
 /*
@@ -103,4 +114,30 @@ func filterVersion(version string, versions []GoVersion) *GoVersion {
 		}
 	}
 	return nil
+}
+
+func downloadVersion(v GoVersion) (filePath string, err error) {
+	fmt.Printf("Download package for version %s\n", v.Name)
+
+	var resp *http.Response
+	resp, err = http.Get(v.LinuxAmd64)
+	if err != nil {
+		return
+	}
+	defer resp.Body.Close()
+	tmpFile, err := ioutil.TempFile("", fmt.Sprintf("%s.tar.gz", v.Name))
+	if err != nil {
+		return
+	}
+	// Create the file
+	file, err := os.OpenFile(tmpFile.Name(), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return
+	}
+	defer file.Close()
+
+	// Write the body to file
+	_, err = io.Copy(file, resp.Body)
+	filePath = file.Name()
+	return
 }
