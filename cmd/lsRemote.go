@@ -13,7 +13,6 @@ var lsRemoteCmd = &cobra.Command{
 	Short: "List available Go versions",
 	Long:  `List available Go versions.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("lsRemote called")
 		versions := versions.ListAvailableVersions()
 		for _, v := range versions {
 			fmt.Printf("- %s\n", v.Name)
