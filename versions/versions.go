@@ -3,6 +3,7 @@ package versions
 import (
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"strings"
@@ -92,4 +93,15 @@ func FilterVersion(version string, versions []GoVersion) *GoVersion {
 		}
 	}
 	return nil
+}
+
+func ListLocalVersions() {
+	files, err := ioutil.ReadDir(config.GetVersionsDir())
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, f := range files {
+		fmt.Println(f.Name())
+	}
 }
