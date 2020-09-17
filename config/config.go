@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/mitchellh/go-homedir"
+	"github.com/spf13/viper"
 )
 
 const (
@@ -40,4 +41,8 @@ GetVersionsDir returns the versions dir
 */
 func GetVersionsDir() string {
 	return filepath.Join(GetWorkspaceDir(), "versions")
+}
+
+func GetVersionsPage() string {
+	return viper.GetString("gvm.versions.page.url")
 }

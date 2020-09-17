@@ -1,0 +1,33 @@
+---
+definitions:
+  steps:
+    - step: &test-app
+        name: Test step
+        image: golang:1.14
+        script:
+          - curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.31.0
+          - go get -v
+          - go test -timeout 10s -cover ./...
+          - golangci-lint run
+        caches:
+          - go
+    - step: &build-app
+        name: Build app step
+        image: golang:1.14
+        script:
+          - CGO_ENABLED=0 GOOS=linux go build -v -o bin/go-version-manager -a -ldflags '-extldflags "-static"'" .
+        artifacts:
+          - bin/*
+        caches:
+          - go
+  caches:
+    go: $GOPATH/pkg
+
+pipelines:
+  default:
+    - step: *test-app
+
+  branches:
+    master:
+      - step: *test-app
+      - step: *build-app

@@ -1,9 +1,29 @@
 package versions
 
 import (
+	"fmt"
+	"log"
 	"os"
 	"testing"
+
+	"github.com/spf13/viper"
+	"gopkg.in/h2non/gock.v1"
 )
+
+const (
+	downloadListPage = "https://link.xpto/dl"
+)
+
+func init() {
+	viper.SetDefault("gvm.versions.page.url", downloadListPage)
+	// If a config file is found, read it in.
+	if err := viper.ReadInConfig(); err == nil {
+		fmt.Println("Using config file:", viper.ConfigFileUsed())
+	} else {
+		log.Println("falha carregando arquivo de configuracoes\n", err.Error())
+	}
+
+}
 
 func TestParseDownloadPage(t *testing.T) {
 	if body, err := os.Open("test_data/download.html"); err != nil {
@@ -30,7 +50,19 @@ func TestParseDownloadPage(t *testing.T) {
 func TestFilterVersionValid(t *testing.T) {
 	versions := createVersionsSlice()
 
-	v := filterVersion("go1.15.1", versions)
+	v := FilterVersion("go1.15.1", versions)
+
+	if v == nil {
+		t.Error("v should not be nil")
+	} else if v.LinuxAmd64 != "https://link.xpto/1.15.1.tar.gz" {
+		t.Errorf("v.LinuxAmd64 should be 'https://link.xpto/1.15.1.tar.gz', but was '%s'", v.LinuxAmd64)
+	}
+}
+
+func TestFilterVersionValidWithoutGo(t *testing.T) {
+	versions := createVersionsSlice()
+
+	v := FilterVersion("1.15.1", versions)
 
 	if v == nil {
 		t.Error("v should not be nil")
@@ -42,10 +74,25 @@ func TestFilterVersionValid(t *testing.T) {
 func TestFilterVersionInvalid(t *testing.T) {
 	versions := createVersionsSlice()
 
-	v := filterVersion("platipus", versions)
+	v := FilterVersion("platipus", versions)
 
 	if v != nil {
 		t.Error("v should be nil")
+	}
+}
+
+func TestListAvailableVersions(t *testing.T) {
+	defer gock.Off()
+
+	gock.New(downloadListPage).
+		Get("/").
+		Reply(200).
+		File("test_data/download.html")
+
+	versions := ListAvailableVersions()
+
+	if len(versions) != 109 {
+		t.Errorf("Should have 109 versions but has '%d'", len(versions))
 	}
 }
 

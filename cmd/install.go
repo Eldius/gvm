@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/Eldius/go-version-manager/versions"
+	"github.com/Eldius/go-version-manager/installer"
 	"github.com/spf13/cobra"
 )
 
@@ -16,7 +16,7 @@ go-version-manager install go1.15.1
 `,
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		versions.Install(args[0])
+		installer.Install(args[0])
 	},
 }
 

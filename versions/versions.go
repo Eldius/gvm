@@ -5,8 +5,6 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/Eldius/go-version-manager/config"
@@ -17,7 +15,7 @@ import (
 ListAvailableVersions lists available Go versions
 */
 func ListAvailableVersions() []GoVersion {
-	res, err := http.Get("https://golang.org/dl/")
+	res, err := http.Get(config.GetVersionsPage())
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -84,30 +82,11 @@ func ParseVersionName(version string) string {
 }
 
 /*
-Install installs go versions
-*/
-func Install(version string) {
-	v := filterVersion(version, ListAvailableVersions())
-	if v == nil {
-		fmt.Println("Version not found...")
-		return
-	}
-	f, err := v.Download()
-	if err != nil {
-		fmt.Printf("Failed to download file from '%s'\n", v.LinuxAmd64)
-		log.Panic(err.Error())
-	}
-	os.Setenv("PATH", fmt.Sprintf("%s:%s", filepath.Join(config.GetWorkspaceDir(), "bin"), os.Getenv("PATH")))
-	fmt.Println(os.Getenv("PATH"))
-	fmt.Println(f)
-}
-
-/*
 FilterVersion filter version slice by name
 */
-func filterVersion(version string, versions []GoVersion) *GoVersion {
+func FilterVersion(version string, versions []GoVersion) *GoVersion {
 	for _, v := range versions {
-		if v.Name == version {
+		if v.Name == version || strings.Replace(v.Name, "go", "", 1) == version {
 			log.Println(v)
 			return &v
 		}
