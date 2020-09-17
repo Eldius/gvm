@@ -87,7 +87,7 @@ FilterVersion filter version slice by name
 */
 func FilterVersion(version string, versions []GoVersion) *GoVersion {
 	for _, v := range versions {
-		if v.Name == version || strings.Replace(v.Name, "go", "", 1) == version {
+		if CompareVersions(version, v.Name) {
 			log.Println(v)
 			return &v
 		}
@@ -95,13 +95,22 @@ func FilterVersion(version string, versions []GoVersion) *GoVersion {
 	return nil
 }
 
-func ListLocalVersions() {
+/*
+CompareVersions compares a version with the required version
+*/
+func CompareVersions(required string, version string) bool {
+	return version == required || strings.Replace(version, "go", "", 1) == required
+}
+
+func ListLocalVersions() (result []string) {
 	files, err := ioutil.ReadDir(config.GetVersionsDir())
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	for _, f := range files {
-		fmt.Println(f.Name())
+		result = append(result, f.Name())
 	}
+
+	return result
 }
