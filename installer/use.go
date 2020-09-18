@@ -12,6 +12,9 @@ import (
 	"github.com/Eldius/go-version-manager/versions"
 )
 
+/*
+Use sets up the version used
+*/
 func Use(version string) {
 	for _, v := range versions.ListLocalVersions() {
 		if versions.CompareVersions(version, v) {
