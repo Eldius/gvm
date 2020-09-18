@@ -73,6 +73,7 @@ func initConfig() {
 	}
 
 	viper.SetDefault("gvm.versions.page.url", "https://golang.org/dl/")
+	viper.SetDefault("gvm.cfg.dir", "~/.gvm")
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {

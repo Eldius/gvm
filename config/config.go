@@ -10,10 +10,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-const (
-	configDir = "~/.gvm"
-)
-
 func init() {
 	_ = os.MkdirAll(GetVersionsDir(), os.ModePerm)
 }
@@ -22,6 +18,7 @@ func init() {
 Root returns the app config root folder
 */
 func Root() string {
+	configDir := viper.GetString("gvm.cfg.dir")
 	cfgDir, err := homedir.Expand(configDir)
 	if err != nil {
 		log.Println("Failed to parse config folder")
@@ -44,10 +41,16 @@ func GetVersionsDir() string {
 	return filepath.Join(GetWorkspaceDir(), "versions")
 }
 
+/*
+GetVersionsPage returns the versions page
+*/
 func GetVersionsPage() string {
 	return viper.GetString("gvm.versions.page.url")
 }
 
+/*
+GetHomeDir returns the home dir
+*/
 func GetHomeDir() string {
 	home, err := homedir.Dir()
 	if err != nil {
