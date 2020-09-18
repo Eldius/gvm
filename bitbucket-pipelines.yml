@@ -15,7 +15,7 @@ definitions:
         name: Build app step
         image: golang:1.14
         script:
-          - CGO_ENABLED=0 GOOS=linux go build -v -o bin/go-version-manager -a -ldflags '-extldflags "-static"'" .
+          - CGO_ENABLED=0 GOOS=linux go build -v -o bin/go-version-manager -a -ldflags '-extldflags "-static"' .
         artifacts:
           - bin/*
         caches:
