@@ -60,3 +60,10 @@ func GetHomeDir() string {
 	}
 	return home
 }
+
+/*
+GetHooksDir returns the hooks dir
+*/
+func GetHooksDir() string {
+	return filepath.Join(GetWorkspaceDir(), "hooks")
+}

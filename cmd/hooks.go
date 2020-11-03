@@ -16,41 +16,34 @@ limitations under the License.
 package cmd
 
 import (
-	"github.com/Eldius/go-version-manager/hooks"
-	"github.com/Eldius/go-version-manager/installer"
+	"fmt"
+
 	"github.com/spf13/cobra"
 )
 
-// useCmd represents the use command
-var useCmd = &cobra.Command{
-	Use:   "use",
-	Short: "Configure system to use an specific version",
-	Long: `Configure system to use an specific version. For example:
+// hookCmd represents the hook command
+var hookCmd = &cobra.Command{
+	Use:   "hooks",
+	Short: "Lists the configured setup hooks",
+	Long: `Lists the configured setup hooks. For example:
 
-go-version-manager install go1.15.1
-
-go-version-manager install 1.15.1
-
+go-version-manager hooks
 `,
-	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		installer.Use(args[0])
-		for _, h := range hooks.ListHooks() {
-			hooks.ExecuteHook(h)
-		}
+		fmt.Println("hook called")
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(useCmd)
+	rootCmd.AddCommand(hookCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// useCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// hookCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// useCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// hookCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
