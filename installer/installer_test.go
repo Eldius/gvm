@@ -28,8 +28,8 @@ func init() {
 		log.Println("falha carregando arquivo de configuracoes\n", err.Error())
 	}
 }
-func TestUnpack(t *testing.T)  {
-	
+func TestUnpack(t *testing.T) {
+
 	v := &versions.GoVersion{
 		Name: "1.2.3",
 	}
