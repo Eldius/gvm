@@ -16,6 +16,8 @@ limitations under the License.
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/Eldius/go-version-manager/hooks"
 	"github.com/Eldius/go-version-manager/installer"
 	"github.com/spf13/cobra"
@@ -34,7 +36,11 @@ go-version-manager install 1.15.1
 `,
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		installer.Use(args[0])
+		if err := installer.Use(args[0]); err != nil {
+			fmt.Println("Failed to setup version", args[0])
+			fmt.Println(err.Error())
+			return
+		}
 		for _, h := range hooks.ListHooks() {
 			hooks.ExecuteHook(h)
 		}

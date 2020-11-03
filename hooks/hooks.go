@@ -52,6 +52,7 @@ func ExecuteHook(hook string) {
 	if err := cmd.Run(); err != nil {
 		fmt.Printf("Failed to execute hook script:\n%s\n", err.Error())
 	}
+	fmt.Println("---")
 }
 
 func addCommand(command string) {

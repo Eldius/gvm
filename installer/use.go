@@ -15,7 +15,7 @@ import (
 /*
 Use sets up the version used
 */
-func Use(version string) {
+func Use(version string) error {
 	for _, v := range versions.ListLocalVersions() {
 		if versions.CompareVersions(version, v) {
 			if !strings.HasPrefix(version, "go") {
@@ -30,13 +30,15 @@ func Use(version string) {
 			if err != nil {
 				fmt.Printf("Failed to create symlink for the new active version")
 				log.Panic(err)
+				return err
 			}
 			updateRcFile(filepath.Join(config.GetHomeDir(), ".bashrc"))
 			fmt.Println("version:", v)
-			return
+			return nil
 		}
 	}
-	fmt.Printf("Version not found locally...\nPlease install this version before run this command\n\ngo-version-manager install %s\n\n", version)
+	//fmt.Printf("Version not found locally...\nPlease install this version before run this command\n\ngo-version-manager install %s\n\n", version)
+	return fmt.Errorf("Version not found locally...\nPlease install this version before run this command\n\ngo-version-manager install %s\n\n", version)
 }
 
 func updateRcFile(fileName string) {
