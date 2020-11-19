@@ -9,8 +9,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/Eldius/go-version-manager/config"
-	"github.com/Eldius/go-version-manager/versions"
+	"github.com/Eldius/gvm/config"
+	"github.com/Eldius/gvm/versions"
 )
 
 /*

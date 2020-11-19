@@ -18,8 +18,8 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/Eldius/go-version-manager/hooks"
-	"github.com/Eldius/go-version-manager/installer"
+	"github.com/Eldius/gvm/hooks"
+	"github.com/Eldius/gvm/installer"
 	"github.com/spf13/cobra"
 )
 

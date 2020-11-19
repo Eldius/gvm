@@ -1,4 +1,4 @@
-module github.com/Eldius/go-version-manager
+module github.com/Eldius/gvm
 
 go 1.15
 

@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/Eldius/go-version-manager/versions"
+	"github.com/Eldius/gvm/versions"
 	"github.com/spf13/viper"
 )
 

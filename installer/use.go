@@ -8,8 +8,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/Eldius/go-version-manager/config"
-	"github.com/Eldius/go-version-manager/versions"
+	"github.com/Eldius/gvm/config"
+	"github.com/Eldius/gvm/versions"
 )
 
 /*
@@ -22,11 +22,21 @@ func Use(version string) error {
 				version = "go" + version
 			}
 			workspaceBinFolder := filepath.Join(config.GetWorkspaceDir(), "bin")
+			workspacePathFolder := filepath.Join(config.GetWorkspaceDir(), "path")
 			//_ = os.MkdirAll(workspaceBinFolder, os.ModePerm)
 			_ = os.Remove(workspaceBinFolder)
+			_ = os.Remove(workspacePathFolder)
 			versionBinDir := filepath.Join(config.GetVersionsDir(), version, "go", "bin")
+			pathDir := filepath.Join(config.GetVersionsDir(), version, "path")
+			_ = os.MkdirAll(pathDir, os.ModePerm)
 
 			err := os.Symlink(versionBinDir, workspaceBinFolder)
+			if err != nil {
+				fmt.Printf("Failed to create symlink for the new active version")
+				log.Panic(err)
+				return err
+			}
+			err = os.Symlink(pathDir, workspacePathFolder)
 			if err != nil {
 				fmt.Printf("Failed to create symlink for the new active version")
 				log.Panic(err)
@@ -48,6 +58,7 @@ func updateRcFile(fileName string) {
 	}
 	s := string(b)
 	pathUpdateStr := "export PATH=\"$HOME/.gvm/workspace/bin:$PATH\""
+	goPathStr := "export GOPATH=\"$HOME/.gvm/workspace/path\""
 
 	if !strings.Contains(s, pathUpdateStr) {
 		destFile, err := os.OpenFile(fileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
@@ -56,6 +67,17 @@ func updateRcFile(fileName string) {
 		}
 		defer destFile.Close()
 		if _, err := destFile.WriteString(fmt.Sprintf("\n# configure gvm path\n%s\n", pathUpdateStr)); err != nil {
+			panic(err.Error())
+		}
+	}
+
+	if !strings.Contains(s, goPathStr) {
+		destFile, err := os.OpenFile(fileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		if err != nil {
+			panic(err.Error())
+		}
+		defer destFile.Close()
+		if _, err := destFile.WriteString(fmt.Sprintf("\n# configure gvm path\n%s\n", goPathStr)); err != nil {
 			panic(err.Error())
 		}
 	}

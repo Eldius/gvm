@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/Eldius/go-version-manager/config"
+	"github.com/Eldius/gvm/config"
 	"github.com/spf13/cobra"
 
 	"github.com/spf13/viper"
@@ -19,7 +19,7 @@ var cfgFile string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "go-version-manager",
+	Use:   "gvm",
 	Short: "A simple go version manager",
 	Long:  `A simple go version manager.`,
 	// Uncomment the following line if your bare application

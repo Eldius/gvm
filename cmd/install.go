@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/Eldius/go-version-manager/installer"
+	"github.com/Eldius/gvm/installer"
 	"github.com/spf13/cobra"
 )
 

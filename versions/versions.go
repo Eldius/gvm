@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/Eldius/go-version-manager/config"
+	"github.com/Eldius/gvm/config"
 	"github.com/PuerkitoBio/goquery"
 )
 

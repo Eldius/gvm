@@ -8,7 +8,7 @@ import (
 	"os/exec"
 	"path/filepath"
 
-	"github.com/Eldius/go-version-manager/config"
+	"github.com/Eldius/gvm/config"
 	"github.com/google/uuid"
 )
 

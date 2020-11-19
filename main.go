@@ -15,7 +15,7 @@ limitations under the License.
 */
 package main
 
-import "github.com/Eldius/go-version-manager/cmd"
+import "github.com/Eldius/gvm/cmd"
 
 func main() {
 	cmd.Execute()
