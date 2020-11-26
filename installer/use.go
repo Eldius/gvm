@@ -57,7 +57,7 @@ func updateRcFile(fileName string) {
 		panic(err)
 	}
 	s := string(b)
-	pathUpdateStr := "export PATH=\"$HOME/.gvm/workspace/bin:$PATH\""
+	pathUpdateStr := "export PATH=\"$HOME/.gvm/workspace/bin:$HOME/.gvm/workspace/path/bin:$PATH\""
 	goPathStr := "export GOPATH=\"$HOME/.gvm/workspace/path\""
 
 	if !strings.Contains(s, pathUpdateStr) {
@@ -77,7 +77,7 @@ func updateRcFile(fileName string) {
 			panic(err.Error())
 		}
 		defer destFile.Close()
-		if _, err := destFile.WriteString(fmt.Sprintf("\n# configure gvm path\n%s\n", goPathStr)); err != nil {
+		if _, err := destFile.WriteString(fmt.Sprintf("\n# configure go path\n%s\n", goPathStr)); err != nil {
 			panic(err.Error())
 		}
 	}
