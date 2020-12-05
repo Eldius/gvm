@@ -1,5 +1,10 @@
 # Go Version Manager (GVM) #
 
+## build/release status ##
+
+![Release artifact](https://github.com/Eldius/gvm/workflows/Release%20artifact/badge.svg)
+![Go](https://github.com/Eldius/gvm/workflows/Go/badge.svg)
+
 ## commands ##
 
 - gvm:
