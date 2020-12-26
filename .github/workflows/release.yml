@@ -25,6 +25,13 @@ jobs:
           GOOS: linux
           GOARCH: amd64
 
+
+      - name: Build Windows amd64 Version
+        run: go build -v -o bin/gvm.windows.amd64 -a -ldflags '-extldflags "-static"' .
+        env:
+          GOOS: windows
+          GOARCH: amd64
+
       - name: Build Raspberry Version
         run: go build -v -o bin/gvm.raspberry -a -ldflags '-extldflags "-static"' .
         env:
@@ -63,4 +70,15 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
           asset_path: ./bin/gvm.linux.amd64
           asset_name: gvm.linux.amd64
+          asset_content_type: application/octet-stream
+
+      - name: Upload Release Windows amd64
+        id: upload-release-asset-windows-amd64
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          asset_path: ./bin/gvm.windows.amd64
+          asset_name: gvm.windows.amd64
           asset_content_type: application/octet-stream
