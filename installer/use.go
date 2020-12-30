@@ -42,7 +42,13 @@ func Use(version string) error {
 				log.Panic(err)
 				return err
 			}
-			updateRcFile(filepath.Join(config.GetHomeDir(), ".bashrc"))
+			home := config.GetHomeDir()
+			for _, f := range []string{filepath.Join(home, ".bashrc"), filepath.Join(home, ".zshrc")} {
+				_, err := os.Stat(f)
+				if err == nil {
+					updateRcFile(f)
+				}
+			}
 			fmt.Println("version:", v)
 			return nil
 		}

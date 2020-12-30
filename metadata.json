@@ -1,0 +1,35 @@
+{
+    "package": "github.com/Eldius/gvm",
+    "version": "0.0.1c",
+    "description": "A tool for manage Go versions.",
+    "building": {
+        "targets": [
+            {
+                "name": "darwin/amd64",
+                "cgo": false,
+                "ldflags": "-extldflags '-static'"
+            },
+            {
+                "name": "linux/amd64",
+                "cgo": false,
+                "ldflags": "-extldflags '-static'"
+            }
+        ]
+    },
+    "publishing": {
+        "targets": [
+            {
+                "src": "gvm_darwin_amd64",
+                "dst": "{{.Repository}}/gvm/{{.Version}}/darwin/amd64/gvm",
+                "sig": true,
+                "checksums": true
+            },
+            {
+                "src": "gvm_linux_amd64",
+                "dst": "{{.Repository}}/gvm/{{.Version}}/linux/amd64/gvm",
+                "sig": true,
+                "checksums": true
+            }
+        ]
+    }
+}
