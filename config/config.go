@@ -15,13 +15,18 @@ func init() {
 }
 
 const (
-	configDir = "~/.gvm"
+	configDirConst = "~/.gvm"
 )
 
 /*
 Root returns the app config root folder
 */
 func Root() string {
+	configDir := viper.GetString("gvm.cfg.dir")
+	if configDir == "" {
+		configDir = configDirConst
+	}
+	fmt.Println("configDir:", configDir)
 	cfgDir, err := homedir.Expand(configDir)
 	if err != nil {
 		log.Println("Failed to parse config folder")
