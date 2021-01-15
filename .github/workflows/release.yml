@@ -26,13 +26,13 @@ jobs:
           GOARCH: amd64
 
       - name: Build Windows amd64 Version
-        run: go build -v -o bin/gvm.linux.amd64 -a -ldflags '-extldflags "-static"'  -ldflags "-X 'github.com/Eldius/gvm/config.BuildDate=$(date +"%Y-%m-%dT%H:%M:%S%:z")' -X 'github.com/Eldius/gvm/config.Version=${{ github.ref }}'"
+        run: go build -v -o bin/gvm.windows.amd64 -a -ldflags '-extldflags "-static"'  -ldflags "-X 'github.com/Eldius/gvm/config.BuildDate=$(date +"%Y-%m-%dT%H:%M:%S%:z")' -X 'github.com/Eldius/gvm/config.Version=${{ github.ref }}'"
         env:
           GOOS: windows
           GOARCH: amd64
 
       - name: Build Raspberry Version
-        run: go build -v -o bin/gvm.linux.amd64 -a -ldflags '-extldflags "-static"'  -ldflags "-X 'github.com/Eldius/gvm/config.BuildDate=$(date +"%Y-%m-%dT%H:%M:%S%:z")' -X 'github.com/Eldius/gvm/config.Version=${{ github.ref }}'"
+        run: go build -v -o bin/gvm.raspberry -a -ldflags '-extldflags "-static"'  -ldflags "-X 'github.com/Eldius/gvm/config.BuildDate=$(date +"%Y-%m-%dT%H:%M:%S%:z")' -X 'github.com/Eldius/gvm/config.Version=${{ github.ref }}'"
         env:
           GOOS: linux
           GOARCH: arm
