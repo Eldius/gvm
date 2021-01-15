@@ -14,11 +14,14 @@ func init() {
 	_ = os.MkdirAll(GetVersionsDir(), os.ModePerm)
 }
 
+const (
+	configDir = "~/.gvm"
+)
+
 /*
 Root returns the app config root folder
 */
 func Root() string {
-	configDir := viper.GetString("gvm.cfg.dir")
 	cfgDir, err := homedir.Expand(configDir)
 	if err != nil {
 		log.Println("Failed to parse config folder")
