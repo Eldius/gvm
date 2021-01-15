@@ -18,6 +18,13 @@ const (
 	configDirConst = "~/.gvm"
 )
 
+var (
+	// Version app version
+	Version string
+	// BuildDate app build date
+	BuildDate string
+)
+
 /*
 Root returns the app config root folder
 */
@@ -26,7 +33,6 @@ func Root() string {
 	if configDir == "" {
 		configDir = configDirConst
 	}
-	fmt.Println("configDir:", configDir)
 	cfgDir, err := homedir.Expand(configDir)
 	if err != nil {
 		log.Println("Failed to parse config folder")
@@ -74,4 +80,18 @@ GetHooksDir returns the hooks dir
 */
 func GetHooksDir() string {
 	return filepath.Join(GetWorkspaceDir(), "hooks")
+}
+
+/*
+GetVersion returns the app version
+*/
+func GetVersion() string {
+	return Version
+}
+
+/*
+GetBuildDate returns the build date info
+*/
+func GetBuildDate() string {
+	return BuildDate
 }
