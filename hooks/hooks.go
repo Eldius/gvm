@@ -34,7 +34,7 @@ func ListHooks() []string {
 	var result []string
 	if err != nil {
 		fmt.Println("Failed to list hooks")
-		log.Fatal(err)
+		log.Fatal(err.Error())
 	}
 
 	for _, f := range files {
