@@ -11,7 +11,7 @@ var installCmd = &cobra.Command{
 	Short: "Install Go version",
 	Long: `Install Go version:
 
-go-version-manager install go1.15.1
+gvm install go1.15.1
 
 `,
 	Args: cobra.ExactArgs(1),

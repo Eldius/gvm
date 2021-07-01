@@ -11,7 +11,7 @@ var hooksAddCmd = &cobra.Command{
 	Short: "Adds a new setup hook",
 	Long: `Adds a new setup hook. For example:
 
-go-version-manager hooks add <hook>
+gvm hooks add <hook>
 
 where 'hook' is a script file or a command
 `,

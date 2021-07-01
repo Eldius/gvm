@@ -1,5 +1,5 @@
 /*
-Copyright © 2020 NAME HERE <EMAIL ADDRESS>
+Copyright © 2021 NAME HERE <EMAIL ADDRESS>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,34 +16,34 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
-
+	"github.com/Eldius/gvm/updates"
 	"github.com/spf13/cobra"
 )
 
-// hookCmd represents the hook command
-var hookCmd = &cobra.Command{
-	Use:   "hooks",
-	Short: "Lists the configured setup hooks",
-	Long: `Lists the configured setup hooks. For example:
+// checkupdatesCmd represents the checkupdates command
+var checkupdatesCmd = &cobra.Command{
+	Use:   "update",
+	Short: "Fetch latest release",
+	Long: `Fetch latest release.
+For example:
 
-gvm hooks
+gvm update
 `,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("hook called")
+	Run: func(_ *cobra.Command, _ []string) {
+		updates.CheckForUpdates()
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(hookCmd)
+	rootCmd.AddCommand(checkupdatesCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// hookCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// checkupdatesCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// hookCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// checkupdatesCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

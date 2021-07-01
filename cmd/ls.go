@@ -28,7 +28,7 @@ var lsCmd = &cobra.Command{
 	Short: "List all installed versions",
 	Long: `List all installed versions. For example:
 
-go-version-manager ls
+gvm ls
 .`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("Listing local versions:")

@@ -29,9 +29,9 @@ var useCmd = &cobra.Command{
 	Short: "Configure system to use an specific version",
 	Long: `Configure system to use an specific version. For example:
 
-go-version-manager install go1.15.1
+gvm install go1.15.1
 
-go-version-manager install 1.15.1
+gvm install 1.15.1
 
 `,
 	Args: cobra.ExactArgs(1),

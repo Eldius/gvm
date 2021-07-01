@@ -43,7 +43,7 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.go-version-manager.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.gvm.yaml)")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
@@ -56,7 +56,7 @@ func initConfig() {
 		// Use config file from the flag.
 		viper.SetConfigFile(cfgFile)
 	} else {
-		// Search config in home directory with name ".go-version-manager" (without extension).
+		// Search config in home directory with name ".gvm" (without extension).
 		viper.AddConfigPath(config.Root())
 		viper.SetConfigName("gvm")
 		viper.SetConfigType("yml")

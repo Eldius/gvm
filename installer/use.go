@@ -53,8 +53,8 @@ func Use(version string) error {
 			return nil
 		}
 	}
-	//fmt.Printf("Version not found locally...\nPlease install this version before run this command\n\ngo-version-manager install %s\n\n", version)
-	return fmt.Errorf("Version not found locally...\nPlease install this version before run this command\n\ngo-version-manager install %s\n\n", version)
+	//fmt.Printf("Version not found locally...\nPlease install this version before run this command\n\ngvm install %s\n\n", version)
+	return fmt.Errorf("Version not found locally...\nPlease install this version before run this command\n\ngvm install %s\n\n", version)
 }
 
 func updateRcFile(fileName string) {
