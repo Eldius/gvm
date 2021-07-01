@@ -37,15 +37,15 @@ func parseDownloadPage(body io.ReadCloser) []GoVersion {
 	}
 
 	var versions []GoVersion
-	doc.Find("table.downloadtable").Each(func(i int, t *goquery.Selection) {
+	doc.Find("table.downloadtable").Each(func(_ int, t *goquery.Selection) {
 		parentAttr, _ := t.Attr("class")
 		log.Printf("testing 00: %v (%v/%s)\n", goquery.NodeName(t), t.HasClass("collapsed"), parentAttr)
-		t.Parent().Find("h2").Each(func(i int, h *goquery.Selection) {
+		t.Parent().Find("h2").Each(func(_ int, h *goquery.Selection) {
 			version := ParseVersionName(h.Text())
 			v := GoVersion{
 				Name: version,
 			}
-			t.Find("tbody>tr").Each(func(i int, r *goquery.Selection) {
+			t.Find("tbody>tr").Each(func(_ int, r *goquery.Selection) {
 				link, _ := r.Find("td.filename>a").Attr("href")
 				osName := r.Find("td::nth-child(3)").Text()
 				archName := r.Find("td::nth-child(4)").Text()
