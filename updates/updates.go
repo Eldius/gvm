@@ -2,6 +2,7 @@ package updates
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -33,6 +34,7 @@ func CheckForUpdates() {
 		t := template.Must(template.New("main").Parse(versiomTemplate))
 		t.Execute(os.Stdout, v)
 	}
+	fmt.Print("\n\n")
 
 }
 
