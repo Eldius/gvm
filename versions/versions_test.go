@@ -35,14 +35,22 @@ func TestParseDownloadPage(t *testing.T) {
 			t.Errorf("Versions list is empty")
 		}
 
+		v1_16_5 := false
 		t.Logf("---\nlength: %d\n", len(versions))
 		for _, v := range versions {
+			if v.Name == "go1.16.5" {
+				v1_16_5 = true
+			}
 			if v.LinuxAmd64 == "" {
 				t.Errorf("Version '%s' must have a LinuxAmd64 link", v.Name)
 			}
 			if v.Source == "" {
 				t.Errorf("Version '%s' must have a Source link", v.Name)
 			}
+		}
+
+		if !v1_16_5 {
+			t.Error("Must find version 'go1.16.5'")
 		}
 	}
 }
@@ -91,7 +99,7 @@ func TestListAvailableVersions(t *testing.T) {
 
 	versions := ListAvailableVersions()
 
-	if len(versions) != 109 {
+	if len(versions) != 188 {
 		t.Errorf("Should have 109 versions but has '%d'", len(versions))
 	}
 }
