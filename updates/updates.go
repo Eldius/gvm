@@ -12,16 +12,16 @@ import (
 const (
 	versiomTemplate = `
 ---
-- {{ .Name }}:
-  published: {{ .PublishedAt }}
-  created:   {{ .CreatedAt }}
-  assets:{{ range .Assets }}
-    - {{ .Name }}
-      download: {{ .BrowserDownloadURL }}{{ end }}`
+- {{ .GetName }}:
+    published: {{ .GetPublishedAt }}
+    assets:{{ range .GetArtifacts }}
+      - {{ .GetName }}
+        download: {{ .GetArtifactURL }}{{ end }}`
 )
 
 func CheckForUpdates() {
-	fmt.Printf("Architecture: %s.%s", runtime.GOOS, runtime.GOARCH)
+	suffixPattern := fmt.Sprintf("%s.%s", runtime.GOOS, runtime.GOARCH)
+	fmt.Printf("Architecture: %s", suffixPattern)
 	r, err := updater.ListReleases("eldius", "gvm", "GITHUB")
 	if err != nil {
 		fmt.Printf("Failed to get releases: %s", err.Error())
