@@ -1,13 +1,12 @@
 package updates
 
 import (
-	"encoding/json"
 	"fmt"
-	"io"
-	"log"
-	"net/http"
 	"os"
+	"runtime"
 	"text/template"
+
+	"github.com/Eldius/app-releases-go/updater"
 )
 
 const (
@@ -22,28 +21,15 @@ const (
 )
 
 func CheckForUpdates() {
-	res, err := http.Get("https://api.github.com/repos/eldius/gvm/releases")
+	fmt.Printf("Architecture: %s.%s", runtime.GOOS, runtime.GOARCH)
+	r, err := updater.ListReleases("eldius", "gvm", "GITHUB")
 	if err != nil {
-		log.Fatalf("Failed to fetch app releases: %s\n", err.Error())
+		fmt.Printf("Failed to get releases: %s", err.Error())
 	}
-	defer res.Body.Close()
-
-	r := parseReleasesResponse(res.Body)
 
 	for _, v := range r {
 		t := template.Must(template.New("main").Parse(versiomTemplate))
 		t.Execute(os.Stdout, v)
 	}
 	fmt.Print("\n\n")
-
-}
-
-func parseReleasesResponse(body io.ReadCloser) []*GithubReleasesResponse {
-	var response []*GithubReleasesResponse
-	err := json.NewDecoder(body).Decode(&response)
-	if err != nil {
-		log.Fatalf("Failed to parse releases response: %s\n", err.Error())
-	}
-
-	return response
 }
