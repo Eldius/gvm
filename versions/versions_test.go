@@ -90,6 +90,7 @@ func TestFilterVersionInvalid(t *testing.T) {
 }
 
 func TestListAvailableVersions(t *testing.T) {
+	qtdVersions := 201
 	defer gock.Off()
 
 	gock.New(downloadListPage).
@@ -99,8 +100,8 @@ func TestListAvailableVersions(t *testing.T) {
 
 	versions := ListAvailableVersions()
 
-	if len(versions) != 188 {
-		t.Errorf("Should have 109 versions but has '%d'", len(versions))
+	if len(versions) != qtdVersions {
+		t.Errorf("Should have %d versions but has '%d'", qtdVersions, len(versions))
 	}
 }
 

@@ -40,7 +40,7 @@ func parseDownloadPage(body io.ReadCloser) []GoVersion {
 	doc.Find("table.downloadtable").Each(func(_ int, t *goquery.Selection) {
 		parentAttr, _ := t.Attr("class")
 		log.Printf("testing 00: %v (%v/%s)\n", goquery.NodeName(t), t.HasClass("collapsed"), parentAttr)
-		t.Parent().Find("h2").Each(func(_ int, h *goquery.Selection) {
+		t.Parent().Find("h3").Each(func(_ int, h *goquery.Selection) {
 			version := ParseVersionName(h.Text())
 			v := GoVersion{
 				Name: version,
