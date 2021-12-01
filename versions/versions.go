@@ -36,6 +36,7 @@ func parseDownloadPage(body io.ReadCloser) []GoVersion {
 		log.Fatal(err)
 	}
 
+	//#go1\.17\.3 > div.expanded > table > tbody > tr:nth-child(7) > td:nth-child(3)
 	var versions []GoVersion
 	doc.Find("table.downloadtable").Each(func(_ int, t *goquery.Selection) {
 		parentAttr, _ := t.Attr("class")
@@ -47,8 +48,8 @@ func parseDownloadPage(body io.ReadCloser) []GoVersion {
 			}
 			t.Find("tbody>tr").Each(func(_ int, r *goquery.Selection) {
 				link, _ := r.Find("td.filename>a").Attr("href")
-				osName := r.Find("td::nth-child(3)").Text()
-				archName := r.Find("td::nth-child(4)").Text()
+				osName := r.Find("td:nth-child(3)").Text()
+				archName := r.Find("td:nth-child(4)").Text()
 				log.Printf("os: '%s' / arch: '%s' / link: '%s'", osName, archName, link)
 				switch os := fmt.Sprintf("%s-%s", osName, archName); os {
 				case "Linux-x86-64":
