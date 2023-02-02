@@ -24,12 +24,14 @@ jobs:
         env:
           GOOS: linux
           GOARCH: amd64
+          CGO_ENABLED: 0
 
       - name: Build Windows amd64 Version
         run: go build -v -o bin/gvm.windows.amd64 -a -ldflags '-extldflags "-static"'  -ldflags "-X 'github.com/Eldius/gvm/config.BuildDate=$(date +"%Y-%m-%dT%H:%M:%S%:z")' -X 'github.com/Eldius/gvm/config.Version=${{ github.ref }}'"
         env:
           GOOS: windows
           GOARCH: amd64
+          CGO_ENABLED: 0
 
       - name: Build Raspberry Version
         run: go build -v -o bin/gvm.raspberry -a -ldflags '-extldflags "-static"'  -ldflags "-X 'github.com/Eldius/gvm/config.BuildDate=$(date +"%Y-%m-%dT%H:%M:%S%:z")' -X 'github.com/Eldius/gvm/config.Version=${{ github.ref }}'"
@@ -37,6 +39,7 @@ jobs:
           GOOS: linux
           GOARCH: arm
           GOARM: 7
+          CGO_ENABLED: 0
 
       - name: Create Release
         id: create_release
