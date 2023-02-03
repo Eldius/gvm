@@ -11,76 +11,19 @@ jobs:
     name: Upload Release Asset
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Go 1.x
-        uses: actions/setup-go@v2
+      - uses: actions/checkout@v3
         with:
-          go-version: ^1.19
-
-      - name: Check out code into the Go module directory
-        uses: actions/checkout@v2
-
-      - name: Build Linux amd64 Version
-        run: go build -v -o bin/gvm.linux.amd64 -a -ldflags '-extldflags "-static"'  -ldflags "-X 'github.com/Eldius/gvm/config.BuildDate=$(date +"%Y-%m-%dT%H:%M:%S%:z")' -X 'github.com/Eldius/gvm/config.Version=${{ github.ref }}'"
-        env:
-          GOOS: linux
-          GOARCH: amd64
-          CGO_ENABLED: 0
-
-      - name: Build Windows amd64 Version
-        run: go build -v -o bin/gvm.windows.amd64 -a -ldflags '-extldflags "-static"'  -ldflags "-X 'github.com/Eldius/gvm/config.BuildDate=$(date +"%Y-%m-%dT%H:%M:%S%:z")' -X 'github.com/Eldius/gvm/config.Version=${{ github.ref }}'"
-        env:
-          GOOS: windows
-          GOARCH: amd64
-          CGO_ENABLED: 0
-
-      - name: Build Raspberry Version
-        run: go build -v -o bin/gvm.raspberry -a -ldflags '-extldflags "-static"'  -ldflags "-X 'github.com/Eldius/gvm/config.BuildDate=$(date +"%Y-%m-%dT%H:%M:%S%:z")' -X 'github.com/Eldius/gvm/config.Version=${{ github.ref }}'"
-        env:
-          GOOS: linux
-          GOARCH: arm
-          GOARM: 7
-          CGO_ENABLED: 0
-
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
+          fetch-depth: 0
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '>=1.19.5'
+          cache: true
+      - name: Test
+        run: go test ./... -cover
+               - uses: goreleaser/goreleaser-action@v4
+        with:
+          distribution: goreleaser
+          version: latest
+          args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
-          draft: false
-          prerelease: false
-
-      - name: Upload Release Asset Raspberry
-        id: upload-release-asset-raspberry
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: ./bin/gvm.raspberry
-          asset_name: gvm.raspberry
-          asset_content_type: application/octet-stream
-
-      - name: Upload Release Linux amd64
-        id: upload-release-asset-linux-amd64
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: ./bin/gvm.linux.amd64
-          asset_name: gvm.linux.amd64
-          asset_content_type: application/octet-stream
-
-      - name: Upload Release Windows amd64
-        id: upload-release-asset-windows-amd64
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: ./bin/gvm.windows.amd64
-          asset_name: gvm.windows.amd64
-          asset_content_type: application/octet-stream
