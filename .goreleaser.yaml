@@ -18,7 +18,7 @@ builds:
     ldflags:
       - -extldflags "-static"
       - -X github.com/Eldius/gvm/config.BuildDate={{.Date}}
-      - -X github.com/Eldius/gvm/config.Version=${{ github.ref }}
+      - -X github.com/Eldius/gvm/config.Version={{.Commit}}
     goarch:
       - amd64
       - arm
