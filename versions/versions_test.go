@@ -90,7 +90,7 @@ func TestFilterVersionInvalid(t *testing.T) {
 }
 
 func TestListAvailableVersions(t *testing.T) {
-	qtdVersions := 201
+	qtdVersions := 245
 	defer gock.Off()
 
 	gock.New(downloadListPage).
