@@ -24,12 +24,6 @@ jobs:
     - name: Test
       run: go test ./... -cover
 
-    - name: Build Linux amd64
-      run: go build -v -o bin/gvm.${GOOS}.${GOARCH} -a -ldflags '-extldflags "-static"' .
-      env:
-        GOOS: linux
-        GOARCH: amd64
-
     - uses: actions/cache@v2
       with:
         path: ~/go/pkg/mod
