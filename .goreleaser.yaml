@@ -8,8 +8,6 @@ builds:
       - CGO_ENABLED=0
     goos:
       - linux
-      - darwin
-      - freebsd
     binary: gvm
     main: ./cmd/cli
     flags:
@@ -26,16 +24,13 @@ builds:
     goarm:
       - 6
       - 7
-    goamd64:
-      - v1
-      - v2
-      - v3
 
 archives:
   - format: tar.gz
     name_template: >-
       {{ .ProjectName }}_
       {{- title .Os }}_
+      {{- title .Version }}_
       {{- if eq .Arch "amd64" }}x86_64
       {{- else if eq .Arch "386" }}i386
       {{- else }}{{ .Arch }}{{ end }}
