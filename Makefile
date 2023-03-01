@@ -1,6 +1,6 @@
 
 test:
-	go test ./... -cover
+	go test ./... -cover -coverprofile=coverage.out
 
 lint:
 	# revive -formatter stylish ./...
