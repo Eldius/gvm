@@ -8,3 +8,9 @@ lint:
 
 release:
 	goreleaser build
+
+vuln:
+	govulncheck ./...
+
+run:
+	go run ./cmd/cli/ install 1.19.1
