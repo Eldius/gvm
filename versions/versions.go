@@ -5,6 +5,7 @@ package versions
 
 import (
 	"fmt"
+	"github.com/PuerkitoBio/goquery"
 	"io"
 	"log"
 	"net/http"
@@ -12,7 +13,6 @@ import (
 	"strings"
 
 	"github.com/Eldius/gvm/config"
-	"github.com/PuerkitoBio/goquery"
 )
 
 /*
@@ -23,7 +23,9 @@ func ListAvailableVersions() []GoVersion {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer res.Body.Close()
+	defer func() {
+		_ = res.Body.Close()
+	}()
 	if res.StatusCode != 200 {
 		log.Fatalf("status code error: %d %s", res.StatusCode, res.Status)
 	}
@@ -41,10 +43,11 @@ func parseDownloadPage(body io.ReadCloser) []GoVersion {
 	//class = "toggleVisible"
 	//#go1\.17\.3 > div.expanded > table > tbody > tr:nth-child(7) > td:nth-child(3)
 	var versions []GoVersion
-	doc.Find("table.downloadtable").Each(func(_ int, t *goquery.Selection) {
+	doc.Find(versionCardsSelector).Each(func(_ int, t *goquery.Selection) {
 		parentAttr, _ := t.Attr("class")
 		log.Printf("testing 00: %v (%v/%s)\n", goquery.NodeName(t), t.HasClass("collapsed"), parentAttr)
-		t.Parent().Find("h3").Each(func(_ int, h *goquery.Selection) {
+		//versionName := t.Find(`div:nth-child(2) > h3`).Text()
+		t.Parent().Parent().Find("h3").Each(func(_ int, h *goquery.Selection) {
 			version := ParseVersionName(h.Text())
 			v := GoVersion{
 				Name: version,

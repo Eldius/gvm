@@ -34,9 +34,21 @@ func TestParseDownloadPage(t *testing.T) {
 		if len(versions) == 0 {
 			t.Errorf("Versions list is empty")
 		}
+		v1_20_4 := false
+		t.Logf("---\nlength: %d\n", len(versions))
+		for _, v := range versions {
+			if v.Name == "go1.20.4" {
+				v1_20_4 = true
+			}
+			if v.LinuxAmd64 == "" {
+				t.Errorf("Version '%s' must have a LinuxAmd64 link", v.Name)
+			}
+			if v.Source == "" {
+				t.Errorf("Version '%s' must have a Source link", v.Name)
+			}
+		}
 
 		v1_16_5 := false
-		t.Logf("---\nlength: %d\n", len(versions))
 		for _, v := range versions {
 			if v.Name == "go1.16.5" {
 				v1_16_5 = true
@@ -51,6 +63,10 @@ func TestParseDownloadPage(t *testing.T) {
 
 		if !v1_16_5 {
 			t.Error("Must find version 'go1.16.5'")
+		}
+
+		if !v1_20_4 {
+			t.Error("Must find version 'go1.20.4'")
 		}
 	}
 }
@@ -90,7 +106,7 @@ func TestFilterVersionInvalid(t *testing.T) {
 }
 
 func TestListAvailableVersions(t *testing.T) {
-	qtdVersions := 245
+	qtdVersions := 251
 	defer gock.Off()
 
 	gock.New(downloadListPage).
