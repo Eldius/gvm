@@ -46,19 +46,20 @@ func parseDownloadPage(body io.ReadCloser) []GoVersion {
 	doc.Find(versionCardsSelector).Each(func(_ int, t *goquery.Selection) {
 		parentAttr, _ := t.Attr("class")
 		log.Printf("testing 00: %v (%v/%s)\n", goquery.NodeName(t), t.HasClass("collapsed"), parentAttr)
-		//versionName := t.Find(`div:nth-child(2) > h3`).Text()
 		t.Parent().Parent().Find("h3").Each(func(_ int, h *goquery.Selection) {
 			version := ParseVersionName(h.Text())
 			v := GoVersion{
 				Name: version,
 			}
-			t.Find("tbody>tr").Each(func(_ int, r *goquery.Selection) {
-				link, _ := r.Find("td.filename>a").Attr("href")
-				osName := r.Find("td:nth-child(3)").Text()
-				archName := r.Find("td:nth-child(4)").Text()
+
+			t.Find(downloadFileByArchRowSelector).Each(func(_ int, r *goquery.Selection) {
+
+				link, _ := r.Find(downloadFileByArchLinkSelector).Attr("href")
+				osName := r.Find(downloadFileByArchOSNameSelector).Text()
+				archName := r.Find(downloadFileByArchArchNameSelector).Text()
 				log.Printf("version: %s / os: '%s' / arch: '%s' / link: '%s'", version, osName, archName, link)
 				switch os := fmt.Sprintf("%s-%s", osName, archName); os {
-				case "Linux-x86-64":
+				case linuxAmd64ArchName:
 					v.LinuxAmd64 = parseLink(link)
 					log.Println("linux")
 				case "-":
