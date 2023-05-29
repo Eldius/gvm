@@ -14,3 +14,7 @@ vuln:
 
 run:
 	go run ./cmd/cli/ install 1.19.1
+
+
+ls-remote:
+	go run ./cmd/cli/ ls-remote
