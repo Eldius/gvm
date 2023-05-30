@@ -14,6 +14,7 @@ GoVersion golang version representation
 type GoVersion struct {
 	Name       string
 	LinuxAmd64 string
+	LinuxArm64 string
 	Source     string
 }
 
@@ -24,7 +25,7 @@ func (v *GoVersion) Download() (filePath string, err error) {
 	fmt.Printf("Download package for version %s\n", v.Name)
 
 	var resp *http.Response
-	resp, err = http.Get(v.LinuxAmd64)
+	resp, err = http.Get(v.GetURL())
 	if err != nil {
 		return
 	}

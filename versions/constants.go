@@ -12,4 +12,5 @@ const (
 
 const (
 	linuxAmd64ArchName = "Linux-x86-64"
+	linuxArm64ArchName = "Linux-ARM64"
 )

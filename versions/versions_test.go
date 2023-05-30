@@ -39,12 +39,15 @@ func TestParseDownloadPage(t *testing.T) {
 		for _, v := range versions {
 			if v.Name == "go1.20.4" {
 				v1_20_4 = true
-			}
-			if v.LinuxAmd64 == "" {
-				t.Errorf("Version '%s' must have a LinuxAmd64 link", v.Name)
-			}
-			if v.Source == "" {
-				t.Errorf("Version '%s' must have a Source link", v.Name)
+				if v.LinuxAmd64 == "" {
+					t.Errorf("Version '%s' must have a LinuxAmd64 link", v.Name)
+				}
+				if v.LinuxArm64 == "" {
+					t.Errorf("Version '%s' must have a LinuxArm64 link", v.Name)
+				}
+				if v.Source == "" {
+					t.Errorf("Version '%s' must have a Source link", v.Name)
+				}
 			}
 		}
 
@@ -52,12 +55,15 @@ func TestParseDownloadPage(t *testing.T) {
 		for _, v := range versions {
 			if v.Name == "go1.16.5" {
 				v1_16_5 = true
-			}
-			if v.LinuxAmd64 == "" {
-				t.Errorf("Version '%s' must have a LinuxAmd64 link", v.Name)
-			}
-			if v.Source == "" {
-				t.Errorf("Version '%s' must have a Source link", v.Name)
+				if v.LinuxAmd64 == "" {
+					t.Errorf("Version '%s' must have a LinuxAmd64 link", v.Name)
+				}
+				if v.LinuxArm64 == "" {
+					t.Errorf("Version '%s' must have a LinuxArm64 link", v.Name)
+				}
+				if v.Source == "" {
+					t.Errorf("Version '%s' must have a Source link", v.Name)
+				}
 			}
 		}
 

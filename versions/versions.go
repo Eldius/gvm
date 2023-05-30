@@ -40,8 +40,6 @@ func parseDownloadPage(body io.ReadCloser) []GoVersion {
 	if err != nil {
 		log.Fatal(err)
 	}
-	//class = "toggleVisible"
-	//#go1\.17\.3 > div.expanded > table > tbody > tr:nth-child(7) > td:nth-child(3)
 	var versions []GoVersion
 	doc.Find(versionCardsSelector).Each(func(_ int, t *goquery.Selection) {
 		parentAttr, _ := t.Attr("class")
@@ -58,10 +56,11 @@ func parseDownloadPage(body io.ReadCloser) []GoVersion {
 				osName := r.Find(downloadFileByArchOSNameSelector).Text()
 				archName := r.Find(downloadFileByArchArchNameSelector).Text()
 				log.Printf("version: %s / os: '%s' / arch: '%s' / link: '%s'", version, osName, archName, link)
-				switch os := fmt.Sprintf("%s-%s", osName, archName); os {
+				switch arch := fmt.Sprintf("%s-%s", osName, archName); arch {
 				case linuxAmd64ArchName:
 					v.LinuxAmd64 = parseLink(link)
-					log.Println("linux")
+				case linuxArm64ArchName:
+					v.LinuxArm64 = parseLink(link)
 				case "-":
 					v.Source = parseLink(link)
 					log.Println("source")

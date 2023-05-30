@@ -72,7 +72,6 @@ func initConfig() {
 		log.SetOutput(logFile)
 	}
 
-	//viper.SetDefault("gvm.versions.page.url", "https://golang.org/dl/")
 	viper.SetDefault("gvm.versions.page.url", "https://go.dev/dl/")
 
 	// If a config file is found, read it in.
