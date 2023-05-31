@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"runtime"
+	"strings"
 )
 
 /*
@@ -50,4 +52,16 @@ func (v *GoVersion) Download() (filePath string, err error) {
 	_, err = io.Copy(file, resp.Body)
 	filePath = file.Name()
 	return
+}
+
+func (v *GoVersion) GetURL() string {
+	platform := fmt.Sprintf("%s-%s", runtime.GOOS, runtime.GOARCH)
+	switch {
+	case strings.EqualFold(platform, linuxAmd64ArchName):
+		return v.LinuxAmd64
+	case strings.EqualFold(platform, linuxArm64ArchName):
+		return v.LinuxArm64
+	default:
+		return v.LinuxAmd64
+	}
 }
