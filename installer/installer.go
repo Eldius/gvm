@@ -48,6 +48,11 @@ func unpack(file string, v *versions.GoVersion) {
 			log.Panic(err.Error())
 		}
 	}
+	//if err := os.MkdirAll(installDir, os.ModePerm); err != nil {
+	//	err = fmt.Errorf("creating installation base path: %w", err)
+	//	log.Println("Failed to create installation base directory...")
+	//	panic(err)
+	//}
 	f, err := os.Open(file)
 	if err != nil {
 		fmt.Println(err)
@@ -85,10 +90,16 @@ func unpack(file string, v *versions.GoVersion) {
 			}
 		case tar.TypeReg:
 			fmt.Printf("  -> Creating file %s\n", dest)
-			f, err := os.OpenFile(dest, os.O_CREATE|os.O_RDWR, os.ModePerm)
+			dir := filepath.Dir(dest)
+			if _, err := os.Stat(dir); err != nil {
+				_ = os.MkdirAll(dir, os.ModePerm)
+			}
+
+			f, err := os.OpenFile(dest, os.O_CREATE|os.O_APPEND|os.O_RDWR, os.ModePerm)
 			if err != nil {
+				err = fmt.Errorf("creating dest file for '%s': %w", name, err)
 				log.Printf("Failed to create file %s\n", dest)
-				log.Panicln(err.Error())
+				log.Panicln(err)
 			}
 			_, err = io.Copy(f, tarReader)
 			fmt.Printf("  -> Writing content to file %s\n", dest)

@@ -13,7 +13,7 @@ vuln:
 	govulncheck ./...
 
 run:
-	go run ./cmd/cli/ install 1.19.1
+	go run ./cmd/cli/ install 1.21.0
 
 
 ls-remote:
