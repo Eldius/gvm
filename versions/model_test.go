@@ -9,18 +9,20 @@ import (
 )
 
 const (
-	versionDownload = "https://download.com/dl/go1.14.tar.gz"
+	versionDownloadLink     = "https://download.com/dl/go1.14.tar.gz"
+	versionDownloadChecksum = "238c0d2cf99b0ee780f756d68f86e4c711f757af6109db767f82e2edc93dfd00"
 )
 
 func TestDownload(t *testing.T) {
 	defer gock.Off()
 
 	v := GoVersion{
-		Name:       "go1.14",
-		LinuxAmd64: versionDownload,
+		Name:               "go1.14",
+		LinuxAmd64:         versionDownloadLink,
+		LinuxAmd64Checksum: versionDownloadChecksum,
 	}
 
-	gock.New(versionDownload).
+	gock.New(versionDownloadLink).
 		Get("/").
 		Reply(200).
 		File("test_data/download.html")

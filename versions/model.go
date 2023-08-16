@@ -2,11 +2,11 @@ package versions
 
 import (
 	"fmt"
+	"github.com/Eldius/gvm/utils"
 	"io"
 	"net/http"
 	"os"
 	"path"
-	"runtime"
 	"strings"
 )
 
@@ -18,6 +18,10 @@ type GoVersion struct {
 	LinuxAmd64 string
 	LinuxArm64 string
 	Source     string
+
+	LinuxAmd64Checksum string
+	LinuxArm64Checksum string
+	SourceChecksum     string
 }
 
 /*
@@ -51,11 +55,17 @@ func (v *GoVersion) Download() (filePath string, err error) {
 	// Write the body to file
 	_, err = io.Copy(file, resp.Body)
 	filePath = file.Name()
+
+	err = utils.ValidateChecksum(filePath, v.GetChecksum())
+	if err != nil {
+		err = fmt.Errorf("validating downloaded file checksum: %w", err)
+		return
+	}
 	return
 }
 
 func (v *GoVersion) GetURL() string {
-	platform := fmt.Sprintf("%s-%s", runtime.GOOS, runtime.GOARCH)
+	platform := utils.GetOSPlatform()
 	switch {
 	case strings.EqualFold(platform, linuxAmd64ArchName):
 		return v.LinuxAmd64
@@ -63,5 +73,17 @@ func (v *GoVersion) GetURL() string {
 		return v.LinuxArm64
 	default:
 		return v.LinuxAmd64
+	}
+}
+
+func (v *GoVersion) GetChecksum() string {
+	platform := utils.GetOSPlatform()
+	switch {
+	case strings.EqualFold(platform, linuxAmd64ArchName):
+		return v.LinuxAmd64Checksum
+	case strings.EqualFold(platform, linuxArm64ArchName):
+		return v.LinuxArm64Checksum
+	default:
+		return v.LinuxAmd64Checksum
 	}
 }

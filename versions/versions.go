@@ -42,8 +42,6 @@ func parseDownloadPage(body io.ReadCloser) []GoVersion {
 	}
 	var versions []GoVersion
 	doc.Find(versionCardsSelector).Each(func(_ int, t *goquery.Selection) {
-		parentAttr, _ := t.Attr("class")
-		log.Printf("testing 00: %v (%v/%s)\n", goquery.NodeName(t), t.HasClass("collapsed"), parentAttr)
 		t.Parent().Parent().Find("h3").Each(func(_ int, h *goquery.Selection) {
 			version := ParseVersionName(h.Text())
 			v := GoVersion{
@@ -55,15 +53,18 @@ func parseDownloadPage(body io.ReadCloser) []GoVersion {
 				link, _ := r.Find(downloadFileByArchLinkSelector).Attr("href")
 				osName := r.Find(downloadFileByArchOSNameSelector).Text()
 				archName := r.Find(downloadFileByArchArchNameSelector).Text()
-				log.Printf("version: %s / os: '%s' / arch: '%s' / link: '%s'", version, osName, archName, link)
+				fileChecksum := r.Find(downloadFileByArchChecksumSelector).Text()
+				//log.Printf("version: %s / os: '%s' / arch: '%s' / link: '%s'", version, osName, archName, link)
 				switch arch := fmt.Sprintf("%s-%s", osName, archName); arch {
 				case linuxAmd64ArchName:
 					v.LinuxAmd64 = parseLink(link)
+					v.LinuxAmd64Checksum = fileChecksum
 				case linuxArm64ArchName:
 					v.LinuxArm64 = parseLink(link)
+					v.LinuxArm64Checksum = fileChecksum
 				case "-":
 					v.Source = parseLink(link)
-					log.Println("source")
+					v.SourceChecksum = fileChecksum
 				default:
 
 				}

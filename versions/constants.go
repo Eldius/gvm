@@ -8,6 +8,7 @@ const (
 	downloadFileByArchLinkSelector     = `td.filename>a`
 	downloadFileByArchOSNameSelector   = `td:nth-child(3)`
 	downloadFileByArchArchNameSelector = `td:nth-child(4)`
+	downloadFileByArchChecksumSelector = `td:nth-child(6)`
 )
 
 const (
